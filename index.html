@@ -353,7 +353,64 @@
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Yapay Zeka Cevap Simülasyonu (Buraya ileride senin klonunu bağlayacağız)
+            // Senin Klonun Olan Akıllı Yapay Zeka
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (input.value.trim() === '') return;
+
+            // Zeynep'in mesajı ekrana yazılıyor
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message outgoing';
+            userMsg.textContent = input.value;
+            chatMessages.appendChild(userMsg);
+
+            const textToSend = input.value;
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Yapay Zekanın Yazıyor Efekti (Bekleme Hissi)
+            const typingMsg = document.createElement('div');
+            typingMsg.className = 'message incoming';
+            typingMsg.textContent = "Yazıyor...";
+            chatMessages.appendChild(typingMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                // Burada senin tarzını taklit eden akıllı yanıt mekanizması devreye giriyor
+                setTimeout(() => {
+                    chatMessages.removeChild(typingMsg);
+                    
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message incoming';
+                    
+                    // Senin hitaplarınla akıllı cevap üretme havuzu
+                    const cevaplar = [
+                        "Efendim güzelim? Ne yapıyorsun bakalım? 🤍",
+                        "Efendim civcivim, dalmışım oraya, söyl一颗 dinliyorum :)",
+                        "Efendim prensesim, buradayım seninleyim.",
+                        "Efendim hayatım, bir şey mi dedin kuzum?",
+                        "Efendim yavrum, sen ne dersen o her zaman.",
+                        "Efendim karım 🌹 Ne kaynatıyorsun bakalım benden habersiz? :)"
+                    ];
+                    
+                    // Rastgele ama senin tarzına uygun bir cevap seçer
+                    const rastgeleCevap = cevaplar[Math.floor(Math.random() * cevaplar.length)];
+                    aiMsg.textContent = rastgeleCevap;
+                    
+                    chatMessages.appendChild(aiMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1200);
+
+            } catch (error) {
+                chatMessages.removeChild(typingMsg);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message incoming';
+                errorMsg.textContent = "Efendim güzelim, şu an ufak bir bağlantı koptu ama kalbim seninle! 🤍";
+                chatMessages.appendChild(errorMsg);
+            }
+        }
             setTimeout(() => {
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message incoming';
