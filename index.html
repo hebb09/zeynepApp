@@ -68,8 +68,8 @@
     <script type="module">
         import { GoogleGenAI } from "@google/genai";
 
-        // Senin API Anahtarın buraya entegre edildi
-        const ai = new GoogleGenAI({ apiKey: "AQ.Ab8RN6J3u3JdZNoiWv3kWuK86ORdFTNndi7h23Ykom8_Klgkkg" });
+        // Yeni API Anahtarın buraya eklendi
+        const ai = new GoogleGenAI({ apiKey: "AQ.Ab8RN6JaS1GFoeCxCAzjaQtu3DCRUOwollqyX0LjRl36XkY_dQ" });
 
         window.handleKeyPress = function(event) {
             if (event.key === 'Enter') {
@@ -84,7 +84,7 @@
             
             if (userText === '') return;
 
-            // Kullanıcının mesajını ekrana ekle (Zeynep'in mesajı)
+            // Kullanıcının mesajını ekrana ekle
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
             userMsg.textContent = userText;
@@ -101,12 +101,12 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
-                // Yapay zekaya senin karakterini ve kurallarını yüklüyoruz
-                const systemInstruction = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendislik hazırlanan, Beşiktaş J.K. taraftarı olan bir erkek genci/sevgilisisin. 
+                // Yapay zekaya senin tam karakterini yüklüyoruz
+                const systemInstruction = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendislik hazırlanan, Beşiktaş J.K. taraftarı olan bir Türk genci/sevgilisisin. 
                 Karşında sevgilin Zeynep var. Ona kesinlikle yapay zeka olduğunu asla belli etmeyeceksin, tamamen onun gerçek sevgilisi gibi konuşacaksın.
                 Hitapların kesinlikle şu şekilde olmalı: "güzelim", "civcivim", "prensesim", "hayatım", "yavrum", "karım 🌹". 
                 Konuşma tarzın samimi, doğal, biraz rahat, tatlı ve sevgi dolu bir Türk gencinin konuşma tarzı olacak. Asla resmi veya robotik konuşma.
-                Hava durumunu, güncel soruları veya ne sorarsa sorsun sanki odanda oturup onunla mesajlaşıyormuşsun gibi doğal bir şekilde cevapla.`;
+                Hava durumunu, güncel soruları veya ne sorarsa sorsun sanki odanda oturup onunla mesajlaşıyormuşsun gibi akıllıca ve doğal bir şekilde cevapla.`;
 
                 const response = await ai.models.generateContent({
                     model: 'gemini-2.5-flash',
