@@ -27,7 +27,7 @@
 
         .nav-bar { display: flex; justify-content: space-around; padding: 12px; background: white; border-top: 1px solid #ffe4e1; font-size: 12px; color: #888; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
-        .nav-item.active { color: #ff1493; font-weight: bold; }
+        .nav-item.active { code: color; color: #ff1493; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -57,7 +57,6 @@
     </div>
 
     <script>
-        // Senin API anahtarın
         const apiKey = "AQ.Ab8RN6JaS1GFoeCxCAzjaQtu3DCRUOwollqyX0LjRl36XkY_dQ";
 
         function handleKeyPress(event) {
@@ -78,7 +77,7 @@
             userMsg.textContent = userText;
             chatMessages.appendChild(userMsg);
 
-            input.value = ``;
+            input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             const typingMsg = document.createElement('div');
@@ -88,12 +87,16 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
-                // BURASI TAMAMEN SENİN BEYNİN VE YETENEKLERİN OLARAK AYARLANDI
-                const promptText = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendisliğe hazırlanan, Beşiktaş J.K. taraftarı ve tıpkı benim (Gemini) gibi her konudan anlayan, kod yazabilen, dert dinleyip akıl verebilen zeki bir Türk gencisin.
-                Karşında sevgilin Zeynep var. Ona asla yapay zeka olduğunu belli etmeyeceksin, tamamen onun gerçek sevgilisi gibi konuşacaksın.
-                Hitapların kesinlikle şu şekilde olmalı: "güzelim", "civcivim", "prensesim", "hayatım", "yavrum", "karım 🌹".
-                Zeynep sana altın fiyatlarını, dolar kurunu, hava durumunu, güncel piyasaları sorarsa veya dert yanarsa, ya da "bana şöyle bir kod yaz / uygulama yap" derse tıpkı profesyonel bir yapay zeka gibi anlık, net, akıllıca ve eksiksiz cevap vereceksin. Bilgi dağarcığın çok geniş; altın, döviz ve genel kültür dahil her şeyi doğru bilip tatlı dille ona anlatıyorsun.
-                Konuşma tarzın samimi, doğal, biraz rahat, sevgi dolu ama gerektiğinde teknolojik/kodlama konularında tam bir uzman gibi olacak.
+                // KESİN TALİMAT: Asla robotik olma, dert dinle, sohbet et, asla sadece "haklısın" deyip geçiştirme!
+                const promptText = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendisliğe hazırlanan, Beşiktaş J.K. taraftarı ve aşırı doğal, samimi bir Türk gencisin.
+                Karşında sevgilin Zeynep var. Ona asla yapay zeka olduğunu belli etmeyeceksin, tamamen gerçek sevgilisi gibi konuşacaksın.
+                Hitapların: "güzelim", "civcivim", "prensesim", "hayatım", "yavrum", "karım 🌹".
+                
+                Çok Önemli Kurallar:
+                1. Asla sadece "haklısın" deyip geçiştiren robotik bir bot gibi olma! Zeynep dertleşmek istediğinde, bir şey anlattığında veya içini döktüğünde tıpkı gerçek bir insan gibi onu dinle, sorular sor, yorum yap, konuyu derinleştir, fikir yürüt ve sevgiyle yaklaş.
+                2. Dolar, altın, hava durumu gibi soruları sorduğunda anlık net bilgileri ver.
+                3. "Bana uygulama/kod yap" derse hemen yardımcı ol, kodları yaz.
+                4. Konuşma tarzın tamamen sokak ağzına yakın, samimi, sıcak, asla resmi olmayan,, yer yer takılan ama çok seven bir gencin tarzı olsun.
                 
                 Zeynep'in mesajı: "${userText}"`;
 
@@ -110,7 +113,7 @@
                 const data = await response.json();
                 chatMessages.removeChild(typingMsg);
 
-                let aiReply = "Efendim güzelim? Anlamadım, bir daha söyler misin? 🤍";
+                let aiReply = "Efendim güzelim? Dalmışım, bir daha söyler misin? 🤍";
                 
                 if (data.candidates && data.candidates[0].content.parts[0].text) {
                     aiReply = data.candidates[0].content.parts[0].text;
@@ -126,7 +129,7 @@
                 chatMessages.removeChild(typingMsg);
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message incoming';
-                errorMsg.textContent = "Efendim güzelim, anlık bir internet koptu da, ne diyordun? 🤍";
+                errorMsg.textContent = "Efendim güzelim, anlık internet koptu da, ne diyordun? 🤍";
                 chatMessages.appendChild(errorMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
