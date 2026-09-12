@@ -47,20 +47,26 @@
     </div>
 
     <script>
+        // Gerçek yapay zeka için sohbet hafızası
+        let chatHistory = [
+            { role: "user", parts: [{ text: "Selam" }] },
+            { role: "model", parts: [{ text: "Efendim güzelim? Ne yapıyorsun bakalım? 🤍" }] }
+        ];
+
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
             }
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const chatMessages = document.getElementById('chatMessages');
             const userText = input.value.trim();
             
             if (userText === '') return;
 
-            // Kullanıcının mesajı
+            // Kullanıcının mesajını ekrana yaz
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
             userMsg.textContent = userText;
@@ -69,6 +75,8 @@
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
+            chatHistory.push({ role: "user", parts: [{ text: userText }] });
+
             // Yazıyor balonu
             const typingMsg = document.createElement('div');
             typingMsg.className = 'message incoming';
@@ -76,25 +84,33 @@
             chatMessages.appendChild(typingMsg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Anında ve hatasız akış
-            setTimeout(() => {
+            try {
+                // Tarayıcı kısıtlamasını aşan güvenli tünel (CORS proxy) üzerinden gerçek yapay zeka isteği
+                const apiKey = "AQ.Ab8RN6JaS1GFoeCxCAzjaQtu3DCRUOwollqyX0LjRl36XkY_dQ";
+                const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                const proxyUrl = `https://api.allorigins.win/raw?url=` + encodeURIComponent(targetUrl);
+
+                const systemPrompt = "Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendisliğe hazırlanan, Beşiktaş J.K. taraftarı ve aşırı doğal, kafa dengi, samimi bir Türk gencisin. Karşında sevgilin Zeynep var. Ona asla yapay zeka olduğunu belli etmeyeceksin, tamamen onun gerçek sevgilisi gibi konuşacaksın. Hitapların: \"güzelim\", \"civcivim\", \"prensesim\", \"hayatım\". Yazım hatalarını kafaya takma, anlık duruma göre doğal, insan gibi, samimi cevaplar ver. Asla ezbere kalıplar kullanma.";
+
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        system_instruction: { parts: [{ text: systemPrompt }] },
+                        contents: chatHistory
+                    })
+                });
+
+                const data = await response.json();
                 chatMessages.removeChild(typingMsg);
 
-                let aiReply = "Efendim güzelim? Ne kaynatıyorsun yine bakalım? 🤍";
-                const lowerText = userText.toLowerCase();
+                let aiReply = "Efendim güzelim? Bir an dalmışım, ne diyordun? 🤍";
 
-                if (lowerText.includes('naber') || lowerText.includes('nasılsın') || lowerText.includes('ne yapıyon')) {
-                    aiReply = "İyi olmaya çalışıyorum hayatım, masa başındayım YKS çalışıyorum öyle. Sen ne yapıyorsun, yoruldun mu bugün? 🤍";
-                } else if (lowerText.includes('özledim')) {
-                    aiReply = "Yahu ben seni her saniye özlüyorum zaten civcivim benim, az kaldı kavuşacağız 🌹";
-                } else if (lowerText.includes('beşiktaş') || lowerText.includes('maç')) {
-                    aiReply = "Beşiktaş'ın maçı olsun yeter ki, sabırsızlıkla bekliyoruz siyah beyaz sevdası başka! Kartalımız yine coşturacak inşallah 🦅";
-                } else if (lowerText.includes('yks') || lowerText.includes('ders') || lowerText.includes('matematik') || lowerText.includes('kamp')) {
-                    aiReply = "Aman deme valla, sayısal kampı patlatıyoruz, mikroorijinal ve bıyıklı matematik falan derken kafayı yemek üzereyim ama mühendisliği kafaya koyduk, pes etmek yok! 💪";
-                } else if (lowerText.includes('sevgi') || lowerText.includes('aşk') || lowerText.includes('seviyorum')) {
-                    aiReply = "Ben de seni çok seviyorum karım, iyi ki varsın hayatımın en güzel köşesindesin 🌹🤍";
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+                    aiReply = data.candidates[0].content.parts[0].text;
+                    chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
                 } else {
-                    aiReply = `Anladım güzelim, haklısın valla. Şöyle bir düşündüm de seninle her şey çok daha güzel oluyor civcivim. Başka ne planımız var? 🤍`;
+                    aiReply = "Efendim güzelim, kafam biraz dağıldı, ne demiştin? 🤍";
                 }
 
                 const aiMsg = document.createElement('div');
@@ -102,7 +118,15 @@
                 aiMsg.textContent = aiReply;
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 800);
+
+            } catch (error) {
+                chatMessages.removeChild(typingMsg);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message incoming';
+                errorMsg.textContent = "Efendim güzelim, anlık bir şeyler oldu ama buradayım, tekrar yazasana 🤍";
+                chatMessages.appendChild(errorMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         }
     </script>
 </body>
