@@ -66,8 +66,9 @@
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const chatMessages = document.getElementById('chatMessages');
+            const text = input.value.trim().toLowerCase();
             
-            if (input.value.trim() === '') return;
+            if (text === '') return;
 
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
@@ -89,18 +90,27 @@
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message incoming';
                 
-                const cevaplar = [
-                    "Efendim güzelim? Ne yapıyorsun bakalım? 🤍",
-                    "Efendim civcivim, dalmışım oraya, seni dinliyorum :)",
-                    "Efendim prensesim, buradayım seninleyim.",
-                    "Efendim hayatım, bir şey mi dedin kuzum?",
-                    "Efendim yavrum, sen ne dersen o her zaman.",
-                    "Efendim karım 🌹 Ne kaynatıyorsun bakalım benden habersiz? :)"
-                ];
+                let cevap = "";
+
+                // Gelen mesaja göre mantıklı cevaplar
+                if (text.includes("naber") || text.includes("nasıl") || text.includes("ne sürüyün")) {
+                    cevap = "İyidir güzelim, seni sormalı? Sen ne yapıyorsun bakalım 🤍";
+                } else if (text.includes("özledim")) {
+                    cevap = "Ben de seni özledim civcivim, hem de çok! Çabuk gel yanıma 🥰";
+                } else if (text.includes("aşkım") || text.includes("seviyorum")) {
+                    cevap = "Ben de seni çok seviyorum karım 🌹 Kalbimin tek sahibisin.";
+                } else {
+                    // Diğer durumlar için genel tatlı hitaplar
+                    const genelCevaplar = [
+                        "Efendim güzelim? Dalmışım oraya, dinliyorum seni :)",
+                        "Efendim prensesim, buradayım seninleyim.",
+                        "Efendim hayatım, bir şey mi dedin kuzum?",
+                        "Öyle mi efendim? Anlat bakalım dinliyorum 🤍"
+                    ];
+                    cevap = genelCevaplar[Math.floor(Math.random() * genelCevaplar.length)];
+                }
                 
-                const rastgeleCevap = cevaplar[Math.floor(Math.random() * cevaplar.length)];
-                aiMsg.textContent = rastgeleCevap;
-                
+                aiMsg.textContent = cevap;
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 1200);
