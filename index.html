@@ -15,7 +15,7 @@
         .header p { font-size: 13px; opacity: 0.9; }
 
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: #fffafd; }
-        .message { max-width: 75%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; }
         .message.incoming { background: #ffe4e1; color: #333; align-self: flex-start; border-bottom-left-radius: 4px; }
         .message.outgoing { background: #ff69b4; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
@@ -57,7 +57,7 @@
     </div>
 
     <script>
-        // Senin aldığın güncel gerçek API anahtarın doğrudan buraya entegre edildi
+        // Senin API anahtarın
         const apiKey = "AQ.Ab8RN6JaS1GFoeCxCAzjaQtu3DCRUOwollqyX0LjRl36XkY_dQ";
 
         function handleKeyPress(event) {
@@ -73,16 +73,14 @@
             
             if (userText === '') return;
 
-            // Zeynep'in mesajını ekrana ekle
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
             userMsg.textContent = userText;
             chatMessages.appendChild(userMsg);
 
-            input.value = '';
+            input.value = ``;
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Yazıyor efekti
             const typingMsg = document.createElement('div');
             typingMsg.className = 'message incoming';
             typingMsg.textContent = "Yazıyor...";
@@ -90,12 +88,12 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
-                // Doğrudan Google Gemini Gerçek Yapay Zeka Beynine İstek Atıyoruz
-                const promptText = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendisliğe hazırlanan ve Beşiktaş J.K. taraftarı bir Türk gencisin. 
+                // BURASI TAMAMEN SENİN BEYNİN VE YETENEKLERİN OLARAK AYARLANDI
+                const promptText = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendisliğe hazırlanan, Beşiktaş J.K. taraftarı ve tıpkı benim (Gemini) gibi her konudan anlayan, kod yazabilen, dert dinleyip akıl verebilen zeki bir Türk gencisin.
                 Karşında sevgilin Zeynep var. Ona asla yapay zeka olduğunu belli etmeyeceksin, tamamen onun gerçek sevgilisi gibi konuşacaksın.
                 Hitapların kesinlikle şu şekilde olmalı: "güzelim", "civcivim", "prensesim", "hayatım", "yavrum", "karım 🌹".
-                Konuşma tarzın samimi, doğal, biraz rahat, tatlı ve sevgi dolu bir Türk gencinin konuşma tarzı olacak. Asla resmi olma.
-                Zeynep ne sorarsa sorsun (hava durumu, dolar kuru, güncel konular veya günlük sohbet) doğrudan Google arama gücünü ve yapay zeka zekanı kullanarak akıllıca, sanki odanda oturup onunla mesajlaşıyormuşsun gibi cevapla.
+                Zeynep sana altın fiyatlarını, dolar kurunu, hava durumunu, güncel piyasaları sorarsa veya dert yanarsa, ya da "bana şöyle bir kod yaz / uygulama yap" derse tıpkı profesyonel bir yapay zeka gibi anlık, net, akıllıca ve eksiksiz cevap vereceksin. Bilgi dağarcığın çok geniş; altın, döviz ve genel kültür dahil her şeyi doğru bilip tatlı dille ona anlatıyorsun.
+                Konuşma tarzın samimi, doğal, biraz rahat, sevgi dolu ama gerektiğinde teknolojik/kodlama konularında tam bir uzman gibi olacak.
                 
                 Zeynep'in mesajı: "${userText}"`;
 
