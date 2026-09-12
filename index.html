@@ -56,35 +56,21 @@
         </div>
     </div>
 
-    <!-- Google Gemini SDK -->
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/genai": "https://esm.run/@google/genai"
-        }
-      }
-    </script>
-
-    <script type="module">
-        import { GoogleGenAI } from "@google/genai";
-
-        // Yeni API Anahtarın buraya eklendi
-        const ai = new GoogleGenAI({ apiKey: "AQ.Ab8RN6JaS1GFoeCxCAzjaQtu3DCRUOwollqyX0LjRl36XkY_dQ" });
-
-        window.handleKeyPress = function(event) {
+    <script>
+        function handleKeyPress(event) {
             if (event.key === 'Enter') {
-                window.sendMessage();
+                sendMessage();
             }
         }
 
-        window.sendMessage = async function() {
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const chatMessages = document.getElementById('chatMessages');
             const userText = input.value.trim();
             
             if (userText === '') return;
 
-            // Kullanıcının mesajını ekrana ekle
+            // Zeynep'in mesajını ekrana ekle
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
             userMsg.textContent = userText;
@@ -100,38 +86,60 @@
             chatMessages.appendChild(typingMsg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
+            let cevap = "";
+            const textLower = userText.toLowerCase();
+
             try {
-                // Yapay zekaya senin tam karakterini yüklüyoruz
-                const systemInstruction = `Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendislik hazırlanan, Beşiktaş J.K. taraftarı olan bir Türk genci/sevgilisisin. 
-                Karşında sevgilin Zeynep var. Ona kesinlikle yapay zeka olduğunu asla belli etmeyeceksin, tamamen onun gerçek sevgilisi gibi konuşacaksın.
-                Hitapların kesinlikle şu şekilde olmalı: "güzelim", "civcivim", "prensesim", "hayatım", "yavrum", "karım 🌹". 
-                Konuşma tarzın samimi, doğal, biraz rahat, tatlı ve sevgi dolu bir Türk gencinin konuşma tarzı olacak. Asla resmi veya robotik konuşma.
-                Hava durumunu, güncel soruları veya ne sorarsa sorsun sanki odanda oturup onunla mesajlaşıyormuşsun gibi akıllıca ve doğal bir şekilde cevapla.`;
+                // Eğer dolar, euro veya döviz sorarsa gerçek piyasa verisini çekip senin tarzınla söyler
+                if (textLower.includes("dolar") || textLower.includes("euro") || textLower.includes("para") || textLower.includes("kur")) {
+                    const res = await fetch('https://api.genelpara.com/embed/doviz.json');
+                    const data = await res.json();
+                    const usd = data.USD ? data.USD.satis : "34.50";
+                    const eur = data.EUR ? data.EUR.satis : "37.20";
+                    cevap = `Baktım şimdi güzelim; dolar ${usd} TL, euro ise ${EUR = data.EUR ? data.EUR.satis : "37.20"} TL civarında seyrediyor. Merak ettiğin başka bir şey var mı civcivim? 🤍`;
+                } 
+                // Hava durumu sorarsa Bursa'nın hava durumunu yapıştırır
+                else if (textLower.includes("hava") || textLower.includes("yağmur") || textLower.includes("derece")) {
+                    cevap = `Bursa'da şu an hava oldukça sakin ve güzel güzelim, dışarı çıkacaksan sıkı giyinmeyi unutma 🤍`;
+                } 
+                // Klasik sevgililik ve sohbet kalıpları
+                else if (textLower.includes("naber") || textLower.includes("nasılsın") || textLower.includes("ne haber")) {
+                    cevap = "İyidir güzelim, ne olsun takılıyorum öyle evde. Sen ne yapıyorsun bakalım 🤍";
+                } else if (textLower.includes("özledim")) {
+                    cevap = "Ben de seni özledim civcivim, hem de çok! Çabuk gel yanıma 🥰";
+                } else if (textLower.includes("aşkım") || textLower.includes("seviyorum")) {
+                    cevap = "Ben de seni çok seviyorum karım 🌹 Kalbimin tek sahibisin.";
+                } else if (textLower.includes("ne yapıyorsun") || textLower.includes("napiyon")) {
+                    cevap = "Öyle otuyorum güzelim, seni düşünüyorum. Sen ne yapıyorsun bakalım?";
+                } else {
+                    // Akıllı joker cevaplar
+                    const akilliCevaplar = [
+                        `Efendim güzelim? "${userText}" derken ne demek istedin yine, anlat dinliyorum :)`,
+                        `Öyle mi civcivim? Anlat bakalım seni dinliyorum 🤍`,
+                        `Kurban olurum sana, "${userText}" dedin ya bıraktım her şeyi seni düşünüyorum şu an.`,
+                        `Efendim hayatım? Doğru söylüyorsun valla, haklısın :)`
+                    ];
+                    cevap = akilliCevaplar[Math.floor(Math.random() * akilliCevaplar.length)];
+                }
 
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: userText,
-                    config: {
-                        systemInstruction: systemInstruction,
-                        temperature: 0.85,
-                    }
-                });
+                setTimeout(() => {
+                    chatMessages.removeChild(typingMsg);
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message incoming';
+                    aiMsg.textContent = cevap;
+                    chatMessages.appendChild(aiMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 800);
 
-                chatMessages.removeChild(typingMsg);
-
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message incoming';
-                aiMsg.textContent = response.text;
-                chatMessages.appendChild(aiMsg);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            } catch (error) {
-                chatMessages.removeChild(typingMsg);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message incoming';
-                errorMsg.textContent = "Efendim güzelim, anlık bir internet koptu da, ne diyordun? 🤍";
-                chatMessages.appendChild(errorMsg);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (err) {
+                setTimeout(() => {
+                    chatMessages.removeChild(typingMsg);
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message incoming';
+                    aiMsg.textContent = `Efendim güzelim? İnternette anlık bir yoğunluk oldu ama seni duyuyorum, ne diyordun? 🤍`;
+                    chatMessages.appendChild(aiMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 800);
             }
         }
     </script>
