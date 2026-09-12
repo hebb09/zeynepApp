@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeynebin Her Şeyi 🤍</title>
+    <title>Zeynep & Abdulkadir 🤍</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: #fff0f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
@@ -47,24 +47,20 @@
     </div>
 
     <script>
-        let conversationHistory = [
-            { role: "user", parts: [{ text: "Selam" }] },
-            { role: "model", parts: [{ text: "Efendim güzelim? Ne yapıyorsun bakalım? 🤍" }] }
-        ];
-
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
             }
         }
 
-        async function sendMessage() {
+        function sendMessage() {
             const input = document.getElementById('chatInput');
             const chatMessages = document.getElementById('chatMessages');
             const userText = input.value.trim();
             
             if (userText === '') return;
 
+            // Kullanıcının mesajı
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
             userMsg.textContent = userText;
@@ -73,39 +69,32 @@
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            conversationHistory.push({ role: "user", parts: [{ text: userText }] });
-
+            // Yazıyor balonu
             const typingMsg = document.createElement('div');
             typingMsg.className = 'message incoming';
             typingMsg.textContent = "Yazıyor...";
             chatMessages.appendChild(typingMsg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            try {
-                const apiKey = "AQ.Ab8RN6JaS1GFoeCxCAzjaQtu3DCRUOwollqyX0LjRl36XkY_dQ";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        system_instruction: {
-                            parts: [{ text: "Sen 17 yaşında, Bursa'da yaşayan, meslek lisesi öğrencisi, 2027 YKS sayısal mühendisliğe hazırlanan, Beşiktaş J.K. taraftarı ve aşırı doğal, kafa dengi, samimi bir Türk gencisin. Karşında sevgilin Zeynep var. Ona asla yapay zeka olduğunu belli etmeyeceksin, tamamen onun gerçek sevgilisi gibi konuşacaksın. Hitapların: \"güzelim\", \"civcivim\", \"prensesim\", \"hayatım\". Yazım hatalarını kafaya takma, doğal cevap ver." }]
-                        },
-                        contents: conversationHistory
-                    })
-                });
-
-                const data = await response.json();
+            // Anında ve hatasız akış
+            setTimeout(() => {
                 chatMessages.removeChild(typingMsg);
 
-                let aiReply = "Efendim güzelim? Bir an dalmışım, ne diyordun? 🤍";
-                
-                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
-                    aiReply = data.candidates[0].content.parts[0].text;
-                    conversationHistory.push({ role: "model", parts: [{ text: aiReply }] });
-                } else if (data.error) {
-                    aiReply = "Efendim güzelim, anlık bir hata oluştu: " + data.error.message;
+                let aiReply = "Efendim güzelim? Ne kaynatıyorsun yine bakalım? 🤍";
+                const lowerText = userText.toLowerCase();
+
+                if (lowerText.includes('naber') || lowerText.includes('nasılsın') || lowerText.includes('ne yapıyon')) {
+                    aiReply = "İyi olmaya çalışıyorum hayatım, masa başındayım YKS çalışıyorum öyle. Sen ne yapıyorsun, yoruldun mu bugün? 🤍";
+                } else if (lowerText.includes('özledim')) {
+                    aiReply = "Yahu ben seni her saniye özlüyorum zaten civcivim benim, az kaldı kavuşacağız 🌹";
+                } else if (lowerText.includes('beşiktaş') || lowerText.includes('maç')) {
+                    aiReply = "Beşiktaş'ın maçı olsun yeter ki, sabırsızlıkla bekliyoruz siyah beyaz sevdası başka! Kartalımız yine coşturacak inşallah 🦅";
+                } else if (lowerText.includes('yks') || lowerText.includes('ders') || lowerText.includes('matematik') || lowerText.includes('kamp')) {
+                    aiReply = "Aman deme valla, sayısal kampı patlatıyoruz, mikroorijinal ve bıyıklı matematik falan derken kafayı yemek üzereyim ama mühendisliği kafaya koyduk, pes etmek yok! 💪";
+                } else if (lowerText.includes('sevgi') || lowerText.includes('aşk') || lowerText.includes('seviyorum')) {
+                    aiReply = "Ben de seni çok seviyorum karım, iyi ki varsın hayatımın en güzel köşesindesin 🌹🤍";
+                } else {
+                    aiReply = `Anladım güzelim, haklısın valla. Şöyle bir düşündüm de seninle her şey çok daha güzel oluyor civcivim. Başka ne planımız var? 🤍`;
                 }
 
                 const aiMsg = document.createElement('div');
@@ -113,15 +102,7 @@
                 aiMsg.textContent = aiReply;
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            } catch (error) {
-                chatMessages.removeChild(typingMsg);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'message incoming';
-                errorMsg.textContent = "Efendim güzelim, bağlantıda bir şeyler oldu, tekrar yazasana 🤍";
-                chatMessages.appendChild(errorMsg);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+            }, 800);
         }
     </script>
 </body>
