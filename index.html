@@ -66,13 +66,14 @@
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const chatMessages = document.getElementById('chatMessages');
-            const text = input.value.trim().toLowerCase();
+            const originalText = input.value.trim();
+            const text = originalText.toLowerCase();
             
             if (text === '') return;
 
             const userMsg = document.createElement('div');
             userMsg.className = 'message outgoing';
-            userMsg.textContent = input.value;
+            userMsg.textContent = originalText;
             chatMessages.appendChild(userMsg);
 
             input.value = '';
@@ -92,28 +93,26 @@
                 
                 let cevap = "";
 
-                // Gelen mesaja göre mantıklı cevaplar
-                if (text.includes("naber") || text.includes("nasıl") || text.includes("ne sürüyün")) {
-                    cevap = "İyidir güzelim, seni sormalı? Sen ne yapıyorsun bakalım 🤍";
+                // Senin gerçek sohbet tarzına göre nokta atışı cevaplar:
+                if (text.includes("naber") || text.includes("nasılsın") || text.includes("ne haber")) {
+                    cevap = "İyidir güzelim, ne olsun takılıyorum öyle. Sen ne yapıyorsun? 🤍";
                 } else if (text.includes("özledim")) {
-                    cevap = "Ben de seni özledim civcivim, hem de çok! Çabuk gel yanıma 🥰";
+                    cevap = "Ben de seni özledim civcivim, çabuk gel yanıma 🥰";
                 } else if (text.includes("aşkım") || text.includes("seviyorum")) {
-                    cevap = "Ben de seni çok seviyorum karım 🌹 Kalbimin tek sahibisin.";
+                    cevap = "Ben de seni çok seviyorum karım 🌹";
+                } else if (text.includes("ne yapıyorsun") || text.includes("napiyon")) {
+                    cevap = "Öyle otuyorum güzelim, seni düşünüyorum. Sen ne yapıyorsun bakalım?";
+                } else if (text.includes("yemek") || text.includes("aç")) {
+                    cevap = "Acıktın mı prensesim? İstersen bir şeyler sipariş edelim ya da kalkalım beraber hazırlayalım bir şeyler 🤍";
                 } else {
-                    // Diğer durumlar için genel tatlı hitaplar
-                    const genelCevaplar = [
-                        "Efendim güzelim? Dalmışım oraya, dinliyorum seni :)",
-                        "Efendim prensesim, buradayım seninleyim.",
-                        "Efendim hayatım, bir şey mi dedin kuzum?",
-                        "Öyle mi efendim? Anlat bakalım dinliyorum 🤍"
-                    ];
-                    cevap = genelCevaplar[Math.floor(Math.random() * genelCevaplar.length)];
+                    // Kullanıcı ne yazarsa yazsın, senin ağzına yakışacak en doğal ve nokta atışı tepki:
+                    cevap = `Efendim güzelim? "${originalText}" derken ne demek istedin bakalım, anlat dinliyorum :)`;
                 }
                 
                 aiMsg.textContent = cevap;
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1200);
+            }, 1000);
         }
     </script>
 </body>
